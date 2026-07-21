@@ -15,7 +15,7 @@ Along the way I:
 - Escalated to administrative access on the Domain Controller
 - Dumped the full AD password database (NTDS)
 - Extracted the KRBTGT hash
-- Authenticated as Administrator via Pass-the-Hash — no plaintext password needed
+- Authenticated as Administrator via Pass-the-Hash, no plaintext password needed
 
 **Domain:** `DRY.MARTINI.BARS` · **DC:** `DC01` (`10.1.221.180`) · **Starting creds:** `ATHENA_SVC` / `1dirtymartini`
 
@@ -39,7 +39,7 @@ Found: `Administrator`, `Guest`, `krbtgt`, `mprice`, `athena.t0`, `ATHENA_SVC`.
 nxc ldap 10.1.221.180 -u ATHENA_SVC -p '1dirtymartini' -d DRY.MARTINI.BARS --query "(objectClass=computer)" ""
 ```
 
-Found `DC01` and `EVILPC` — `DC01` was the primary target.
+Found `DC01` and `EVILPC`. `DC01` was the primary target.
 
 ![Domain computer objects DC01 and EVILPC](/assets/images/img2.png)
 
@@ -49,11 +49,11 @@ Found `DC01` and `EVILPC` — `DC01` was the primary target.
 nxc smb 10.1.221.180 -u ATHENA_SVC -p '1dirtymartini' -d DRY.MARTINI.BARS --shares
 ```
 
-Shares: `ADMIN$`, `C$`, `IPC$`, `NETLOGON`, `notes`, `SYSVOL`. `ATHENA_SVC` had **READ/WRITE** on `notes` — a potential foothold on its own.
+Shares: `ADMIN$`, `C$`, `IPC$`, `NETLOGON`, `notes`, `SYSVOL`. `ATHENA_SVC` had **READ/WRITE** on `notes`, which is a potential foothold on its own.
 
 ![SMB share listing showing notes share with READ/WRITE](/assets/images/img3.png)
 
-## 4. Password Reuse — the turning point
+## 4. Password Reuse (the turning point)
 
 Built a user list from Step 1 and sprayed the known password across the subnet:
 
@@ -67,7 +67,7 @@ Hit:
 DRY.MARTINI.BARS\athena.t0:1dirtymartini (Pwn3d!)
 ```
 
-`athena.t0` reused the service account's password — and had admin rights on the DC.
+`athena.t0` reused the service account's password, and it had admin rights on the DC.
 
 ![Password spray hit showing athena.t0 Pwn3d](/assets/images/img4.png)
 
@@ -115,7 +115,7 @@ krbtgt:502
 22ebc290e67668629c8d0812662a9c51
 ```
 
-This hash can forge Kerberos tickets (Golden Tickets) — persistence that survives individual password resets.
+This hash can forge Kerberos tickets (Golden Tickets), giving persistence that survives individual password resets.
 
 ![KRBTGT account hash highlighted in NTDS dump](/assets/images/img8.png)
 
@@ -156,8 +156,8 @@ ATHENA_SVC creds → LDAP enum → password reuse → athena.t0 admin
 
 ## Troubleshooting
 
-- **BloodHound collection failed** — LDAP signing was enforced, blocking unsigned collection.
-- **`smbclient` share access failed** with just the hash — it expects a password, not an NT hash; needed a hash-aware tool instead.
+- **BloodHound collection failed.** LDAP signing was enforced, blocking unsigned collection.
+- **`smbclient` share access failed** with just the hash. It expects a password, not an NT hash, so I needed a hash-aware tool instead.
 
 ## Security Impact
 
