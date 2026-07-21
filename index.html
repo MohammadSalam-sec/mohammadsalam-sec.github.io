@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -150,7 +152,7 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
 <nav id="mainNav">
   <div class="logo">MS</div>
   <ul class="nav-links">
-    <li><a href="/blog">Blog</a></li>
+    <li><a href="#blog">Blog</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -307,7 +309,24 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
     </div>
   </div>
 </section>
-
+  
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-inner">
+    <div class="pill reveal">Blog</div>
+    <div class="proj-grid">
+      {% for post in site.posts %}
+      <div class="proj-card reveal">
+        <div class="proj-top"><span class="proj-n">{{ post.date | date: "%b %d" }}</span></div>
+        <div class="proj-title">{{ post.title }}</div>
+        <p class="proj-desc">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+        <div class="proj-tags"><a href="{{ post.url }}" class="tag" style="text-decoration:none">Read more →</a></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+  
 <!-- CONTACT -->
 <div class="contact-section" id="contact">
   <div class="contact-inner">
