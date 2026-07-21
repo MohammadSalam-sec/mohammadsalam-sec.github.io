@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }} — Mohammad Salam</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f8f8fc;color:#1a1523;line-height:1.6}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6%;display:flex;justify-content:space-between;align-items:center;background:rgba(248,248,252,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06)}
+.logo{font-size:1rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#7c3aed,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.82rem;color:#6b7280;text-decoration:none;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:#7c3aed}
+main{max-width:800px;margin:0 auto;padding:8rem 6% 5rem}
+h1{font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.5rem;color:#0f0a1e}
+.post-date{font-size:0.8rem;color:#9ca3af;margin-bottom:2.5rem;font-weight:500}
+article p{font-size:0.92rem;color:#4b5563;margin-bottom:1.2rem;line-height:1.9}
+article img{max-width:100%;border-radius:12px;margin:1.5rem 0;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+a{color:#7c3aed;text-decoration:none}
+a:hover{text-decoration:underline}
+footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07);font-size:0.75rem;color:#9ca3af;margin-top:2rem}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">MS</div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  {{ content }}
+</main>
+<footer>© 2026 Mohammad Salam · Dubai, UAE</footer>
+</body>
+</html>
