@@ -2,8 +2,6 @@
 layout: post
 title: "Active Directory Domain Compromise: From Valid Credentials to Full Domain Takeover"
 date: 2026-07-22
-categories: [pentesting, active-directory]
-tags: [active-directory, pentest, pass-the-hash, ntds, crackmapexec, netexec, ldap]
 ---
 
 ## Introduction
