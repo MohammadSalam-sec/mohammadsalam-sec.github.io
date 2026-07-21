@@ -13,3 +13,5 @@ The shift happened when I started following a structured process: recon, enumera
 Now, whether I'm working through a PJPT lab or testing in a live environment, I treat methodology as the foundation everything else sits on. The tools change constantly. The process is what stays consistent, and it's the difference between finding a vulnerability by luck and finding it because you knew where to look.
 
 If you're starting out in this field, my advice: learn the process before you fall in love with the tools. The tools will make more sense once you do.
+
+![Phases](/assets/images/5phases.jpg)
