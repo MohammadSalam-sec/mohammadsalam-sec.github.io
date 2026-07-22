@@ -16,7 +16,35 @@ By the end, that one account had led me to full control of the domain: every pas
 
 ## Getting my bearings
 
-The first thing I do in any engagement, real or simulated, is figure out what I'm actually looking at before I touch anything else. With one valid credential, LDAP is the quickest way to see the shape of a domain: who exists, what's out there, and where the interesting targets might be.
+The first thing I do in any engagement, real or simulated, is figure out what I'm actually looking at before I touch anything else. I had one valid credential and one IP address, `10.1.221.180`, so I started with a port scan to see what the machine was actually running.
+
+```bash
+nmap -sC -sV -p- 10.1.221.180
+```
+
+```
+Not shown: 987 filtered tcp ports (no-response)
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2026-07-21 19:09:49Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: DRY.MARTINI.BARS0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: DRY.MARTINI.BARS0., Site: Default-First-Site-Name)
+3269/tcp open  tcpwrapped
+3389/tcp open  ms-wbt-server
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+```
+
+The port list read like a checklist for a Domain Controller: Kerberos on 88, LDAP on 389 and 3268, SMB on 445, RDP on 3389. The LDAP service banner even confirmed the domain name outright, `DRY.MARTINI.BARS`, and an SSL certificate on the box named the host itself: `DC01.DRY.MARTINI.BARS`. There was no ambiguity left. This was the domain's Domain Controller, and with LDAP wide open, that was the obvious next door to knock on since it would tell me who and what actually existed inside this domain.
+
+![Nmap scan revealing Domain Controller ports on 10.1.221.180](/assets/images/img1-1.png)
+
+With that confirmed, I moved to LDAP.
 
 ```bash
 nxc ldap 10.1.221.180 -u ATHENA_SVC -p '1dirtymartini' -d DRY.MARTINI.BARS --users
