@@ -12,9 +12,26 @@ By the end, a note left on an anonymously accessible file share had led me to fu
 
 **Domain:** `DRY.MARTINI.BARS` · **DC:** `DC01` (`10.1.221.180`)
 
+### Contents
+
+1. [Getting my bearings](#bearings)
+2. [Finding the note nobody was supposed to leave behind](#finding-the-note)
+3. [Turning a note into a foothold](#foothold)
+4. [Mapping the domain](#mapping)
+5. [The account that shouldn't have had an SPN](#spn)
+6. [Cracking the ticket](#cracking)
+7. [The mistake that broke the case open](#mistake)
+8. [Confirming how far this actually went](#confirming)
+9. [Taking everything the domain had](#ntds)
+10. [Proving it beyond doubt](#pth)
+11. [The path it took](#path)
+12. [What didn't work](#didnt-work)
+13. [Why this mattered](#why)
+14. [What I'd recommend fixing](#recommendations)
+
 ---
 
-## Getting my bearings
+## Getting my bearings {#bearings}
 
 The first thing I do in any engagement, real or simulated, is figure out what I'm actually looking at before I touch anything else. I had one IP address, `10.1.221.180`, so I started with a full port scan to see what the machine was actually running.
 
@@ -46,7 +63,7 @@ The port list read like a checklist for a Domain Controller: Kerberos on 88, LDA
 
 With no credentials yet, the next move was to see whether anything was reachable without them.
 
-## Finding the note nobody was supposed to leave behind
+## Finding the note nobody was supposed to leave behind {#finding-the-note}
 
 SMB shares are one of the first things worth checking anonymously, since misconfigured domains often leave more open than they realize.
 
@@ -80,7 +97,7 @@ Buried under a to-do list was exactly what I was looking for: a username and pas
 
 ![Contents of notes.txt showing mprice credentials](/assets/images/img1-3.png)
 
-## Turning a note into a foothold
+## Turning a note into a foothold {#foothold}
 
 Found credentials mean nothing until they're validated.
 
@@ -112,7 +129,7 @@ NETLOGON   READ
 
 ![Shares enumerated using mprice credentials](/assets/images/img1-5.png)
 
-## Mapping the domain
+## Mapping the domain {#mapping}
 
 With an authenticated account, LDAP and SMB enumeration open up considerably. I pulled the full list of domain users.
 
@@ -144,7 +161,7 @@ nxc ldap 10.1.221.180 -u mprice -p '*martini*' --groups
 
 ![LDAP group enumeration confirming access with mprice](/assets/images/img3.png)
 
-## The account that shouldn't have had an SPN
+## The account that shouldn't have had an SPN {#spn}
 
 One of the accounts on that user list, `ATHENA_SVC`, was clearly a service account by its naming convention. Service accounts with Service Principal Names are a classic weak point in Active Directory, since anyone with a domain account can request a Kerberos ticket for them and attempt to crack it offline. Worth checking.
 
@@ -164,7 +181,7 @@ $krb5tgs$23$*ATHENA_SVC$...
 
 ![Kerberoasting hit returning a TGS hash for ATHENA_SVC](/assets/images/img3-1.png)
 
-## Cracking the ticket
+## Cracking the ticket {#cracking}
 
 With the hash saved, I moved to hashcat.
 
@@ -176,7 +193,7 @@ The ticket cracked cleanly against `rockyou.txt`, revealing the plaintext passwo
 
 ![Hashcat cracking the kerberoasted ticket to reveal the password](/assets/images/img3-2.png)
 
-## The mistake that broke the case open
+## The mistake that broke the case open {#mistake}
 
 I tried the cracked password against the account it belonged to first.
 
@@ -202,7 +219,7 @@ DRY.MARTINI.BARS\athena.t0:1dirtymartini (Pwn3d!)
 
 ![Password spray hit showing athena.t0 Pwn3d](/assets/images/img4-1.png)
 
-## Confirming how far this actually went
+## Confirming how far this actually went {#confirming}
 
 Finding a hit is one thing. Proving what it actually gets you is another, so I checked exactly what `athena.t0` had access to.
 
@@ -233,7 +250,7 @@ That was the moment the engagement shifted. This wasn't enumeration anymore, the
 
 ![Whoami output confirming execution as athena.t0](/assets/images/img6.png)
 
-## Taking everything the domain had
+## Taking everything the domain had {#ntds}
 
 With that level of access, there was really only one next move: pull the entire Active Directory password database and see exactly what I was dealing with.
 
@@ -247,7 +264,7 @@ Every account in the domain came back with its hash: `Administrator`, `krbtgt`, 
 
 One entry mattered more than the rest: `krbtgt`, hash `22ebc290e67668629c8d0812662a9c51`. This is the account Kerberos itself relies on, and owning its hash means being able to forge valid authentication tickets on demand. It's the difference between a compromise you can clean up by resetting a few passwords, and one that persists no matter what the defenders do afterward, unless they specifically know to rotate this account too.
 
-## Proving it beyond doubt
+## Proving it beyond doubt {#pth}
 
 I had hashes. The question was whether I actually needed the plaintext passwords behind them, and the answer, as usual with Windows authentication, was no.
 
@@ -279,7 +296,7 @@ Starting from a single anonymous file share, the domain was now completely mine.
 
 ---
 
-## The path it took
+## The path it took {#path}
 
 ```
 Anonymous SMB → notes.txt → mprice creds → domain enumeration
@@ -289,7 +306,7 @@ Anonymous SMB → notes.txt → mprice creds → domain enumeration
 
 Every step here followed logically from the last. Nothing about this required a zero-day or a clever exploit, it required patience, a methodical process, and paying attention to the small mistakes that real environments make all the time: a note left where it shouldn't have been, a service account that didn't need an SPN, and a password reused one time too many.
 
-## What didn't work
+## What didn't work {#didnt-work}
 
 Not every avenue paid off, and I think that's worth including rather than leaving out.
 
@@ -297,11 +314,11 @@ Not every avenue paid off, and I think that's worth including rather than leavin
 
 **Direct SMB access using just the hash failed at first.** `smbclient` expects a plaintext password by default, not an NT hash, so a hash-aware tool was needed instead. Small thing, but it's the kind of detail that trips people up if they assume every tool handles authentication the same way.
 
-## Why this mattered
+## Why this mattered {#why}
 
 None of this was the result of a sophisticated attack. It was the result of ordinary, common mistakes: credentials left in plaintext on an anonymously accessible share, a service account with an unnecessary SPN, and a password reused between that service account and a privileged user. Put those together, and a single anonymous file share is enough to walk away with the entire domain.
 
-## What I'd recommend fixing
+## What I'd recommend fixing {#recommendations}
 
 - Never store credentials in plaintext files on any share, especially ones reachable anonymously
 - Restrict or disable anonymous SMB access entirely where it isn't required
