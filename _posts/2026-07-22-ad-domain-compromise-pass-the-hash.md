@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How One Note on a File Share Led to a Full Domain Takeover"
+title: "Active Directory Domain Compromise: From Anonymous Access to Full Domain Takeover"
 date: 2026-07-21 23:50:00 +0400
 excerpt: "One anonymous file share, a cracked password, and a repeated mistake led to full control of an entire domain, starting from zero credentials."
 toc:
