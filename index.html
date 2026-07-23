@@ -102,7 +102,8 @@ section{padding:6rem 6%}
 .exp-title{font-size:0.95rem;font-weight:600;color:#1a1523;margin-bottom:0.9rem}
 .exp-title em{font-style:normal;color:#7c3aed}
 .exp-pts{list-style:none;display:flex;flex-direction:column;gap:0.5rem}
-.exp-pts li{font-size:0.82rem;color:#4b5563;line-height:1.7}
+.exp-pts li{font-size:0.82rem;color:#4b5563;line-height:1.7;position:relative;padding-left:1.1rem}
+.exp-pts li::before{content:'•';position:absolute;left:0;color:#7c3aed;font-weight:700}
 
 /* PROJECTS */
 #projects{background:#f3f2f9}
@@ -152,7 +153,7 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
 <nav id="mainNav">
   <div class="logo">MS</div>
   <ul class="nav-links">
-    <li><a href="#blog">Blog</a></li>
+    <li><a href="#blog">Blogs</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -209,7 +210,7 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
     <div class="about-cols reveal">
       <div>
         <p class="about-p">Cybersecurity professional with a <strong>B.S. from RIT Dubai</strong> and hands-on experience across penetration testing, vulnerability assessment, and SOC operations.</p>
-        <p class="about-p">At <strong>flydubai</strong>, I tested enterprise web applications, assessed 200+ assets with Qualys, and supported SOC operations using Splunk. I think like an attacker to help organisations stay ahead.</p>
+        <p class="about-p">I've gained hands-on experience across penetration testing and vulnerability assessment, using tools like Burp Suite, Nmap, DirBuster, and Gobuster to identify and address weaknesses in applications and networks. I've also worked with Qualys for vulnerability assessment and patch management, which shaped how I think about proactive security rather than reactive fixes.</p>
         <p class="about-p">Currently completing <strong>PJPT</strong> and building a home SOC lab to sharpen detection and response skills.</p>
       </div>
       <div class="cert-stack">
@@ -238,6 +239,24 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
   </div>
 </section>
 
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-inner">
+    <div class="pill reveal">Blogs</div>
+    <div class="proj-grid">
+      {% for post in site.posts %}
+      <div class="proj-card reveal">
+        <div class="proj-top"><span class="proj-n">{{ post.date | date: "%b %d" }}</span></div>
+        <div class="proj-title">{{ post.title }}</div>
+        <p class="proj-desc">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+        <div class="proj-tags"><a href="{{ post.url }}" class="tag" style="text-decoration:none">Read more →</a></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
 <!-- EXPERIENCE -->
 <section id="experience">
   <div class="section-inner">
@@ -252,9 +271,9 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
         <div>
           <div class="exp-title">Cybersecurity <em>Intern</em></div>
           <ul class="exp-pts">
-            <li>Web app security testing with Burp Suite, Nmap, DirBuster — found SQLi, XSS, and auth flaws in enterprise systems</li>
-            <li>Vulnerability assessments on 200+ assets using Qualys, CVE remediation aligned with ISO 27001</li>
-            <li>SOC support via Splunk log analysis, alert triage, and incident response workflows</li>
+            <li>Identified SQL Injection, XSS, and authentication vulnerabilities via web app security testing (Burp Suite, Nmap, DirBuster)</li>
+            <li>Performed vulnerability scans using Qualys, prioritizing findings by severity for remediation tracking</li>
+            <li>Assisted in reviewing security alerts in Splunk, supporting incident response workflows</li>
           </ul>
         </div>
       </div>
@@ -267,7 +286,7 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
         <div>
           <div class="exp-title">IT Support <em>Intern</em></div>
           <ul class="exp-pts">
-            <li>Active Directory administration — user provisioning, onboarding and offboarding workflows</li>
+            <li>Active Directory administration, including user provisioning and onboarding/offboarding workflows</li>
             <li>Email security management including spam filters, phishing reports, and mailbox permissions</li>
           </ul>
         </div>
@@ -310,22 +329,6 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
   </div>
 </section>
   
-<!-- BLOG -->
-<section id="blog">
-  <div class="section-inner">
-    <div class="pill reveal">Blog</div>
-    <div class="proj-grid">
-      {% for post in site.posts %}
-      <div class="proj-card reveal">
-        <div class="proj-top"><span class="proj-n">{{ post.date | date: "%b %d" }}</span></div>
-        <div class="proj-title">{{ post.title }}</div>
-        <p class="proj-desc">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
-        <div class="proj-tags"><a href="{{ post.url }}" class="tag" style="text-decoration:none">Read more →</a></div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
   
 <!-- CONTACT -->
 <div class="contact-section" id="contact">
