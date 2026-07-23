@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f8f8fc;color:#1a1523;line-height:1.6}
+body{font-family:'Inter',sans-serif;background:#f8f8fc;color:#1a1523;line-height:1.6;overflow-x:hidden}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6%;display:flex;justify-content:space-between;align-items:center;background:rgba(248,248,252,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06)}
 .logo{font-size:1rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#7c3aed,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .nav-links{display:flex;gap:2rem;list-style:none}
@@ -15,10 +15,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6%;display:fl
 .nav-links a:hover{color:#7c3aed}
 main{max-width:1050px;margin:0 auto;padding:6.5rem 6% 4.5rem}
 
-.post-layout{display:grid;grid-template-columns:1fr 230px;gap:3.5rem;align-items:start}
+.post-layout{display:grid;grid-template-columns:1fr 230px;gap:3.5rem;align-items:start;min-width:0}
 @media(max-width:900px){.post-layout{grid-template-columns:1fr}}
 
-.post-toc{position:sticky;top:6rem;max-height:calc(100vh - 8rem);overflow-y:auto}
+.post-main{min-width:0;overflow-x:hidden}
+.post-toc{position:sticky;top:6rem;max-height:calc(100vh - 8rem);overflow-y:auto;min-width:0}
 .toc-inner{background:#f3f2f9;border:1px solid rgba(0,0,0,0.07);border-radius:12px;padding:1.35rem 1.5rem}
 .toc-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7c3aed;margin-bottom:0.85rem}
 .post-toc ol{list-style:none;padding-left:0;margin:0;display:flex;flex-direction:column;gap:0.55rem;counter-reset:toc-counter}
