@@ -2,6 +2,36 @@
 layout: post
 title: "Active Directory Domain Compromise: From Valid Credentials to Full Domain Takeover"
 date: 2026-07-21 23:50:00 +0400
+excerpt: "One anonymous SMB share, a cracked Kerberos ticket, and a reused password led to full domain compromise, starting from zero credentials."
+toc:
+  - id: bearings
+    title: Getting my bearings
+  - id: finding-the-note
+    title: Finding the note
+  - id: foothold
+    title: Turning it into a foothold
+  - id: mapping
+    title: Mapping the domain
+  - id: spn
+    title: The account with an SPN
+  - id: cracking
+    title: Cracking the ticket
+  - id: mistake
+    title: The password reuse
+  - id: confirming
+    title: Confirming admin access
+  - id: ntds
+    title: Taking the NTDS dump
+  - id: pth
+    title: Pass-the-Hash
+  - id: path
+    title: The path it took
+  - id: didnt-work
+    title: What didn't work
+  - id: why
+    title: Why this mattered
+  - id: recommendations
+    title: Recommendations
 ---
 
 ## Introduction
@@ -11,23 +41,6 @@ This lab is from [HackSmarter](https://www.hacksmarter.org/courses/8da0b008-7692
 By the end, a note left on an anonymously accessible file share had led me to full control of the domain: every password hash in Active Directory, the keys to forge Kerberos tickets at will, and Administrator access on the Domain Controller itself. Here's how it happened.
 
 **Domain:** `DRY.MARTINI.BARS` · **DC:** `DC01` (`10.1.221.180`)
-
-### Contents
-
-1. [Getting my bearings](#bearings)
-2. [Finding the note nobody was supposed to leave behind](#finding-the-note)
-3. [Turning a note into a foothold](#foothold)
-4. [Mapping the domain](#mapping)
-5. [The account that shouldn't have had an SPN](#spn)
-6. [Cracking the ticket](#cracking)
-7. [The mistake that broke the case open](#mistake)
-8. [Confirming how far this actually went](#confirming)
-9. [Taking everything the domain had](#ntds)
-10. [Proving it beyond doubt](#pth)
-11. [The path it took](#path)
-12. [What didn't work](#didnt-work)
-13. [Why this mattered](#why)
-14. [What I'd recommend fixing](#recommendations)
 
 ---
 
