@@ -210,8 +210,10 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
     <div class="about-cols reveal">
       <div>
         <p class="about-p">Cybersecurity professional with a <strong>B.S. from RIT Dubai</strong> and hands-on experience across penetration testing, vulnerability assessment, and SOC operations.</p>
-        <p class="about-p">I've gained hands-on experience across penetration testing and vulnerability assessment, using tools like Burp Suite, Nmap, DirBuster, and Gobuster to identify and address weaknesses in applications and networks. I've also worked with Qualys for vulnerability assessment and patch management, which shaped how I think about proactive security rather than reactive fixes.</p>
-        <p class="about-p">Currently completing <strong>PJPT</strong> and building a home SOC lab to sharpen detection and response skills.</p>
+        <p class="about-p">At <strong>flydubai</strong>, I got hands-on experience testing web applications and running vulnerability scans, learning to translate findings into fixes a team can actually act on.</p>
+        <p class="about-p">That same mindset carried into an <strong>IoT penetration test</strong> that reached root access through eight chained vulnerabilities.</p>
+        <p class="about-p">Actively practicing <strong>Active Directory</strong> attacks in a home lab to prepare for the <strong>PJPT</strong> exam.</p>
+        <p class="about-p">A home <strong>SOC lab</strong> with <strong>Wazuh</strong> is next on the list, focused on detection and response.</p>
       </div>
       <div class="cert-stack">
         <div class="cert-row">
@@ -322,8 +324,8 @@ footer{text-align:center;padding:1.75rem 6%;border-top:1px solid rgba(0,0,0,0.07
         <span class="soon-lbl">Coming Soon</span>
         <div class="proj-top"><span class="proj-n">04</span></div>
         <div class="proj-title">SOC Home Lab</div>
-        <p class="proj-desc">Wazuh SIEM + TheHive + Shuffle SOAR. Simulating real attacks, building detection rules and response playbooks.</p>
-        <div class="proj-tags"><span class="tag">Wazuh</span><span class="tag">TheHive</span><span class="tag">Shuffle</span><span class="tag">Kali</span></div>
+        <p class="proj-desc">Wazuh SIEM detecting real attacks from a Kali machine against a Windows victim host, with custom detection rules.</p>
+        <div class="proj-tags"><span class="tag">Wazuh</span><span class="tag">SIEM</span><span class="tag">Kali</span></div>
       </div>
     </div>
   </div>
@@ -383,6 +385,28 @@ window.addEventListener('scroll', () => {
     if (a.getAttribute('href') === '#' + current) a.classList.add('active');
   });
 }, { passive: true });
+
+navLinks.forEach(a => {
+  a.addEventListener('click', (e) => {
+    const targetId = a.getAttribute('href').slice(1);
+    const target = document.getElementById(targetId);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+      history.replaceState(null, '', '/');
+    }
+  });
+});
+
+if (window.location.hash) {
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (target) {
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth' });
+      history.replaceState(null, '', '/');
+    }, 100);
+  }
+}
 </script>
 </body>
 </html>
