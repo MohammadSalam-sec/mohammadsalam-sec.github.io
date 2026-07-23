@@ -13,7 +13,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6%;display:fl
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{font-size:0.82rem;color:#6b7280;text-decoration:none;font-weight:500;transition:color 0.2s}
 .nav-links a:hover{color:#7c3aed}
-main{max-width:800px;margin:0 auto;padding:8rem 6% 5rem}
+main{max-width:1100px;margin:0 auto;padding:8rem 6% 5rem}
+
+.post-layout{display:grid;grid-template-columns:1fr 230px;gap:3.5rem;align-items:start}
+@media(max-width:900px){.post-layout{grid-template-columns:1fr}}
+
+.post-toc{position:sticky;top:6.5rem}
+.toc-label{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7c3aed;margin-bottom:0.9rem}
+.post-toc ol{list-style:none;padding-left:0;margin:0;display:flex;flex-direction:column;gap:0.65rem;counter-reset:toc-counter}
+.post-toc li{font-size:0.78rem;line-height:1.5;counter-increment:toc-counter}
+.post-toc li::before{content:counter(toc-counter)". ";color:#a78bfa;font-weight:600;margin-right:0.15rem}
+.post-toc a{color:#6b7280;text-decoration:none;border-bottom:none}
+.post-toc a:hover{color:#7c3aed}
+@media(max-width:900px){.post-toc{position:static;margin-bottom:2.5rem;background:#f3f2f9;border:1px solid rgba(0,0,0,0.06);border-radius:12px;padding:1.5rem}}
 h1{font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.5rem;color:#0f0a1e}
 .post-date{font-size:0.8rem;color:#9ca3af;margin-bottom:2.5rem;font-weight:500}
 
