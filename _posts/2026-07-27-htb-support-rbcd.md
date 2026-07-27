@@ -84,7 +84,7 @@ Everything came back `STATUS_ACCESS_DENIED`, no users, no groups, no shares via 
 With RPC closed off, I checked SMB directly instead.
 
 ```bash
-smbclient -N -L //10.129.230.181/ -users
+smbclient -N -L //10.129.230.181/
 ```
 
 This is where things opened up. One share stood out immediately: `support-tools`, not a default Windows share name.
